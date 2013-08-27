@@ -45,17 +45,42 @@ namespace Mictlanix.FiscoClic.Client.Test
 
 		static void Main(string[] args)
 		{
-			DummyTest (USERNAME, PASSWORD);
-			//Test01 (url, cert);
-			//Test02 (url, cert);
-			//Test03 (url, cert);
-			//Test04 (url, cert);
-			//Test05 (url, cert);
-			//Test06 (url, cert);
-			//Test07 (url, cert);
-			//Test08 (url, cert);
-			//Test09 (url, cert);
+			StampTest (USERNAME, PASSWORD);
+			CancelTest (USERNAME, PASSWORD);
 		}
+
+		static void StampTest (string username, string password)
+		{
+			var cfd = CreateCFD ();
+			var cli = new FiscoClicClient (username, password);
+
+			AddItems (cfd, "Producto", 3);
+			cfd.Sign (File.ReadAllBytes (CSD_PRIVATE_KEY_FILE), Encoding.UTF8.GetBytes(CSD_PRIVATE_KEY_PWD));
+
+			var tfd = cli.Stamp (cfd);
+			Console.WriteLine (tfd.ToXmlString ());
+
+			cfd.Complemento = new List<object>();
+			cfd.Complemento.Add (tfd);
+
+			Console.WriteLine (cfd.ToXmlString ());
+			Console.WriteLine (cfd.ToString ());
+		}
+
+		static void CancelTest (string username, string password)
+		{
+			var cli = new FiscoClicClient (username, password);
+			var issuer = "AAA010101AAA";
+			var uuid = "FD94ED4E-7E57-46FE-8FBD-D400A1FAF7FA";
+
+			if (cli.Cancel (issuer, uuid)) {
+				Console.WriteLine ("Cancel Test: Success");
+			} else  {
+				Console.WriteLine ("Cancel Test: Fail");
+			}
+		}
+
+		#region Helper Functions
 
 		static Comprobante CreateCFD()
 		{
@@ -70,7 +95,7 @@ namespace Mictlanix.FiscoClic.Client.Test
 				formaDePago = "PAGO EN UNA SOLA EXHIBICION",
 				TipoCambio = (1m).ToString(),
 				Moneda = "MXN",
-				noCertificado = "00001000000203341766",
+				noCertificado = "20001000000200001428",
 				certificado = Convert.ToBase64String (File.ReadAllBytes (CSD_CERTIFICATE_FILE)),
 				Emisor = new ComprobanteEmisor
 				{
@@ -84,7 +109,7 @@ namespace Mictlanix.FiscoClic.Client.Test
 				},
 				Receptor = new ComprobanteReceptor
 				{
-					rfc = "BBB010101BBB",
+					rfc = "XAXX010101000",
 					nombre = "EMPRESA DEMO SC"
 				},
 				Impuestos = new ComprobanteImpuestos()
@@ -157,22 +182,6 @@ namespace Mictlanix.FiscoClic.Client.Test
 			};
 		}
 
-		static void DummyTest (string username, string password)
-		{
-			var cfd = CreateCFD ();
-			var cli = new FiscoClicClient (username, password);
-
-			AddItems (cfd, "Producto", 3);
-			cfd.Sign (File.ReadAllBytes (CSD_PRIVATE_KEY_FILE), Encoding.UTF8.GetBytes(CSD_PRIVATE_KEY_PWD));
-
-			var tfd = cli.Stamp (cfd);
-			Console.WriteLine (tfd.ToXmlString ());
-
-			cfd.Complemento = new List<object>();
-			cfd.Complemento.Add (tfd);
-
-			Console.WriteLine (cfd.ToXmlString ());
-			Console.WriteLine (cfd.ToString ());
-		}
+		#endregion
 	}
 }

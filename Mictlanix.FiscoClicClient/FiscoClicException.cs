@@ -12,12 +12,18 @@ namespace Mictlanix.FiscoClic.Client
 		public FiscoClicException (string message) : base (message)
         {
         }
-
-		public FiscoClicException (string code, string message) : base (message)
+		
+		internal FiscoClicException (string message, Internals.FiscoClicException ex) : base (message)
 		{
-			Code = code;
-        }
+			Code = ex.Code;
+			FieldName = ex.FieldName;
+			ServiceName = ex.ServiceName;
+			Description = ex.Message;
+		}
 
 		public string Code { get; private set; }
+		public string FieldName { get; private set; }
+		public string ServiceName { get; private set; }
+		public string Description { get; private set; }
     }
 }

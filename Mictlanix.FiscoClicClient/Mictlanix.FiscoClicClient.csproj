@@ -32,13 +32,18 @@
     <Reference Include="System" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Runtime.Serialization" />
-    <Reference Include="System.ServiceModel" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="FiscoClicClient.cs" />
     <Compile Include="FiscoClicException.cs" />
-    <Compile Include="Internals\FiscoClicWSClient.cs" />
+    <Compile Include="Internals\SoapEnvelope.cs" />
+    <Compile Include="Internals\SoapFault.cs" />
+    <Compile Include="Internals\TimbraCFDIXML.cs" />
+    <Compile Include="Internals\TimbraCFDIXMLResponse.cs" />
+    <Compile Include="Internals\FiscoClicException.cs" />
+    <Compile Include="Internals\CancelaCFDI.cs" />
+    <Compile Include="Internals\CancelaCFDIResponse.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

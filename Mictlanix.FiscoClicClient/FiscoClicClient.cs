@@ -24,10 +24,11 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 using System;
+using System.IO;
 using System.Net;
 using System.Net.Security;
 using System.Security.Cryptography.X509Certificates;
-using System.ServiceModel;
+using System.Text;
 using System.Xml;
 using Mictlanix.FiscoClic.Client.Internals;
 using Mictlanix.CFDv32;
@@ -37,20 +38,6 @@ namespace Mictlanix.FiscoClic.Client
 	public class FiscoClicClient
 	{
 		public static string PRODUCTION_URL = @"https://www.fiscoclic.mx/factura/WSEntityServices/timbre/TimbraWS";
-		private static readonly BasicHttpBinding binding = new BasicHttpBinding (BasicHttpSecurityMode.Transport) {
-			MaxBufferPoolSize = int.MaxValue,
-			MaxReceivedMessageSize = int.MaxValue,
-			ReaderQuotas = new XmlDictionaryReaderQuotas
-			{
-				MaxDepth = int.MaxValue,
-				MaxStringContentLength = int.MaxValue,
-				MaxArrayLength = int.MaxValue,
-				MaxBytesPerRead = int.MaxValue,
-				MaxNameTableCharCount = int.MaxValue,
-			}
-		};
-
-		private string url;
 
 		public FiscoClicClient (string username, string password) : this (username, password, PRODUCTION_URL)
 		{
@@ -66,53 +53,155 @@ namespace Mictlanix.FiscoClic.Client
 				(object sp, X509Certificate c, X509Chain r, SslPolicyErrors e) => true;
 		}
 
-		protected string Username { get; set; }
-		protected string Password { get; set; }
-		protected BasicHttpBinding Binding { get { return binding; } }
-		protected EndpointAddress Address { get; private set; }
-		public string Url {
-			get { return url;}
-			set {
-				if (url == value)
-					return;
-
-				url = value;
-				Address = new EndpointAddress (url);
-			}
-		}
+		public string Username { get; protected set; }
+		public string Password { get; protected set; }
+		public string Url { get; protected set; }
 
 		public TimbreFiscalDigital Stamp (Comprobante cfd)
 		{
-			string tfd_str;
+			var env = CreateEnvelope (cfd);
+			string response = TryRequest (env);
 
-			//try {
-				var ws = new cfdiServiceInterfaceClient (Binding, Address);
-				//tfd_str = ws.timbraCFDIXML (cfd.ToXmlString (), Username, Password);
-				tfd_str = ws.timbraCFDIXMLTest (cfd.ToXmlString (), Username, Password);
-				ws.Close ();
-			//} catch(FaultException<FiscoClicException> ex) {
-			//	throw new FiscoClicException (ex.Detail.Code, ex.Reason.ToString ());
-			//} catch (Exception ex) {
-			//	throw new FiscoClicException (ex.Message);
-			//}
-
-			if (string.IsNullOrEmpty (tfd_str)) {
+			if (response.Length == 0) {
 				throw new FiscoClicException ("Bad response format.");
 			}
 
-			var tfd = TimbreFiscalDigital.FromXml (tfd_str);
+			var doc = SoapEnvelope.FromXml (response);
 
-			if (tfd == null) {
+			if (doc.Body.Length == 0) {
 				throw new FiscoClicException ("Bad response format.");
 			}
 
-			return new TimbreFiscalDigital {
-				UUID = tfd.UUID,
-				FechaTimbrado = tfd.FechaTimbrado,
-				selloCFD = tfd.selloCFD,
-				noCertificadoSAT = tfd.noCertificadoSAT,
-				selloSAT = tfd.selloSAT
-			};
+			if (doc.Body[0] is TimbraCFDIXMLResponse) {
+				var res = doc.Body[0] as TimbraCFDIXMLResponse;
+				var tfd = TimbreFiscalDigital.FromXml (res.Return);
+
+				return new TimbreFiscalDigital {
+					UUID = tfd.UUID,
+					FechaTimbrado = tfd.FechaTimbrado,
+					selloCFD = tfd.selloCFD,
+					noCertificadoSAT = tfd.noCertificadoSAT,
+					selloSAT = tfd.selloSAT
+				};
+			}
+
+			if (doc.Body[0] is SoapFault) {
+				var fault = doc.Body[0] as SoapFault;
+				throw new FiscoClicException (fault.FaultString, fault.Detail.Exception);
+			}
+
+			return null;
 		}
+		
+		public bool Cancel (string issuer, string uuid)
+		{
+			var env = CreateEnvelope (issuer, uuid);
+			string response = TryRequest (env);
+
+			if (response.Length == 0) {
+				throw new FiscoClicException ("Bad response format.");
+			}
+
+			var doc = SoapEnvelope.FromXml (response);
+
+			if (doc.Body.Length == 0) {
+				throw new FiscoClicException ("Bad response format.");
+			}
+
+			if (doc.Body[0] is CancelaCFDIResponse) {
+				var res = doc.Body[0] as CancelaCFDIResponse;
+				return Convert.ToBoolean (res.Return);
+			}
+
+			if (doc.Body[0] is SoapFault) {
+				var fault = doc.Body[0] as SoapFault;
+				throw new FiscoClicException (fault.FaultString, fault.Detail.Exception);
+			}
+
+			return false;
+		}
+
+		SoapEnvelope CreateEnvelope (Comprobante doc)
+		{
+			var request = new SoapEnvelope {
+				Body = new TimbraCFDIXML[] {
+					new TimbraCFDIXML {
+						cfdi = doc.ToXmlString (),
+						user = Username,
+						pass = Password
+					}
+				}
+			};
+
+			return request;
+		}
+
+		SoapEnvelope CreateEnvelope (string issuer, string uuid)
+		{
+			var request = new SoapEnvelope {
+				Body = new CancelaCFDI[] {
+					new CancelaCFDI {
+						uuid = uuid,
+						rfcEmisor = issuer,
+						user = Username,
+						pass = Password
+					}
+				}
+			};
+
+			return request;
+		}
+
+		string TryRequest (SoapEnvelope env)
+		{
+			var bytes = env.ToXmlBytes ();
+			string response = string.Empty;
+			var dt = DateTime.Now;
+
+#if DEBUG
+			System.Diagnostics.Debug.WriteLine (env.ToXmlString ());
+#endif
+
+			try {
+				response = DoPostRequest (Url, bytes);
+			} catch(WebException ex) {
+#if DEBUG
+				System.Diagnostics.Debug.WriteLine (ex);
+#endif
+				var hwr = ex.Response as HttpWebResponse;
+				if (hwr != null && hwr.StatusCode == HttpStatusCode.InternalServerError) {
+					using (var sr = new StreamReader(hwr.GetResponseStream())) {
+						response = sr.ReadToEnd ();
+					}
+				}
+			}
+
+#if DEBUG
+			System.Diagnostics.Debug.WriteLine (response);
+#endif
+
+			return response;
+		}
+
+		string DoPostRequest (string url, byte[] data)
+		{
+			var req = (HttpWebRequest)WebRequest.Create(url);
+			req.ContentType = "text/xml; charset=utf-8";
+			req.Method = "POST";
+			req.ContentLength = data.Length;
+
+			using(var stream = req.GetRequestStream ()) {
+				stream.Write (data, 0, data.Length);
+			}
+
+			using(var resp = req.GetResponse ()) {
+				using(var stream = resp.GetResponseStream ()) {
+					using(var sr = new StreamReader (stream, Encoding.UTF8)) {
+						return sr.ReadToEnd ();
+					}
+				}
+			}
+		}
+
 	}
 }
