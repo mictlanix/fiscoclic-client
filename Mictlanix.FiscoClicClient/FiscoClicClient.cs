@@ -63,13 +63,13 @@ namespace Mictlanix.FiscoClic.Client
 			string response = TryRequest (env);
 
 			if (response.Length == 0) {
-				throw new FiscoClicException ("Bad response format.");
+				throw new FiscoClicClientException ("Bad response format.");
 			}
 
 			var doc = SoapEnvelope.FromXml (response);
 
 			if (doc.Body.Length == 0) {
-				throw new FiscoClicException ("Bad response format.");
+				throw new FiscoClicClientException ("Bad response format.");
 			}
 
 			if (doc.Body[0] is TimbraCFDIXMLResponse) {
@@ -87,7 +87,7 @@ namespace Mictlanix.FiscoClic.Client
 
 			if (doc.Body[0] is SoapFault) {
 				var fault = doc.Body[0] as SoapFault;
-				throw new FiscoClicException (fault.FaultString, fault.Detail.Exception);
+				throw new FiscoClicClientException (fault.FaultString, fault.Detail.Exception);
 			}
 
 			return null;
@@ -99,13 +99,13 @@ namespace Mictlanix.FiscoClic.Client
 			string response = TryRequest (env);
 
 			if (response.Length == 0) {
-				throw new FiscoClicException ("Bad response format.");
+				throw new FiscoClicClientException ("Bad response format.");
 			}
 
 			var doc = SoapEnvelope.FromXml (response);
 
 			if (doc.Body.Length == 0) {
-				throw new FiscoClicException ("Bad response format.");
+				throw new FiscoClicClientException ("Bad response format.");
 			}
 
 			if (doc.Body[0] is CancelaCFDIResponse) {
@@ -115,7 +115,7 @@ namespace Mictlanix.FiscoClic.Client
 
 			if (doc.Body[0] is SoapFault) {
 				var fault = doc.Body[0] as SoapFault;
-				throw new FiscoClicException (fault.FaultString, fault.Detail.Exception);
+				throw new FiscoClicClientException (fault.FaultString, fault.Detail.Exception);
 			}
 
 			return false;

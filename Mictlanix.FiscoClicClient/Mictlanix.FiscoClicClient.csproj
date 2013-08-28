@@ -36,7 +36,6 @@
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="FiscoClicClient.cs" />
-    <Compile Include="FiscoClicException.cs" />
     <Compile Include="Internals\SoapEnvelope.cs" />
     <Compile Include="Internals\SoapFault.cs" />
     <Compile Include="Internals\TimbraCFDIXML.cs" />
@@ -44,13 +43,14 @@
     <Compile Include="Internals\FiscoClicException.cs" />
     <Compile Include="Internals\CancelaCFDI.cs" />
     <Compile Include="Internals\CancelaCFDIResponse.cs" />
+    <Compile Include="FiscoClicClientException.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
     <Folder Include="Internals\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\cfdlib\Mictlanix.CFDLib.csproj">
+    <ProjectReference Include="..\..\CFDLib\Mictlanix.CFDLib.csproj">
       <Project>{63EBACD8-7BB0-480F-81BF-5E0690B27112}</Project>
       <Name>Mictlanix.CFDLib</Name>
     </ProjectReference>
