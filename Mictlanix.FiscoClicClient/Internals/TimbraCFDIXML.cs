@@ -31,10 +31,11 @@ using System.Xml.Serialization;
 namespace Mictlanix.FiscoClic.Client.Internals
 {
 	[Serializable]
-	[XmlType(Namespace="http://srv.soap.factura.sit.mx.com")]
 #if DEBUG
+	[XmlType("timbraCFDIXMLTest", Namespace = "http://srv.soap.factura.sit.mx.com")]
 	[XmlRoot("timbraCFDIXMLTest", Namespace="http://srv.soap.factura.sit.mx.com", IsNullable=false)]
 #else
+	[XmlType("timbraCFDIXML", Namespace = "http://srv.soap.factura.sit.mx.com")]
 	[XmlRoot("timbraCFDIXML", Namespace="http://srv.soap.factura.sit.mx.com", IsNullable=false)]
 #endif
 	public partial class TimbraCFDIXML

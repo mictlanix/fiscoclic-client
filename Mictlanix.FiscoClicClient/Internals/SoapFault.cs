@@ -36,7 +36,7 @@ using Mictlanix.CFDv32;
 namespace Mictlanix.FiscoClic.Client.Internals
 {
 	[Serializable]
-	[XmlType(Namespace="http://schemas.xmlsoap.org/soap/envelope/")]
+	[XmlType("Fault", Namespace="http://schemas.xmlsoap.org/soap/envelope/")]
 	[XmlRoot("Fault", Namespace="http://schemas.xmlsoap.org/soap/envelope/", IsNullable=false)]
 	public partial class SoapFault
 	{

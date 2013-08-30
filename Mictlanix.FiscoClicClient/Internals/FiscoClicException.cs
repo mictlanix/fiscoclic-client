@@ -31,7 +31,7 @@ using System.Xml.Serialization;
 namespace Mictlanix.FiscoClic.Client.Internals
 {
 	[Serializable]
-	[XmlType(Namespace="http://srv.soap.factura.sit.mx.com")]
+	[XmlType("FiscoClicException", Namespace="http://srv.soap.factura.sit.mx.com")]
 	[XmlRoot("FiscoClicException", Namespace="http://srv.soap.factura.sit.mx.com", IsNullable=false)]
 	public partial class FiscoClicException
 	{

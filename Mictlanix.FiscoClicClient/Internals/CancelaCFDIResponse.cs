@@ -31,10 +31,11 @@ using System.Xml.Serialization;
 namespace Mictlanix.FiscoClic.Client.Internals
 {
 	[Serializable]
-	[XmlType(Namespace="http://srv.soap.factura.sit.mx.com")]
 #if DEBUG
+	[XmlType("cancelaCFDITestResponse", Namespace="http://srv.soap.factura.sit.mx.com")]
 	[XmlRoot("cancelaCFDITestResponse", Namespace="http://srv.soap.factura.sit.mx.com", IsNullable=false)]
 #else
+	[XmlType("cancelaCFDIResponse", Namespace="http://srv.soap.factura.sit.mx.com")]
 	[XmlRoot("cancelaCFDIResponse", Namespace="http://srv.soap.factura.sit.mx.com", IsNullable=false)]
 #endif
 	public class CancelaCFDIResponse
