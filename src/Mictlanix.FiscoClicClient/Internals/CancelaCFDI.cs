@@ -1,10 +1,10 @@
 //
-// SoapFault.cs
+// CancelaCFDI.cs
 //
 // Author:
 //       Eddy Zavaleta <eddy@mictlanix.com>
 //
-// Copyright (c) 2013 Eddy Zavaleta, Mictlanix, and contributors.
+// Copyright (c) 2013-2016 Eddy Zavaleta, Mictlanix, and contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -24,42 +24,65 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Runtime.Serialization.Formatters;
-using System.Text;
 using System.Xml;
 using System.Xml.Schema;
 using System.Xml.Serialization;
-using Mictlanix.CFDv32;
 
 namespace Mictlanix.FiscoClic.Client.Internals
 {
 	[Serializable]
-	[XmlType("Fault", Namespace="http://schemas.xmlsoap.org/soap/envelope/")]
-	[XmlRoot("Fault", Namespace="http://schemas.xmlsoap.org/soap/envelope/", IsNullable=false)]
-	public partial class SoapFault
+#if DEBUG
+	[XmlType("cancelaCFDITest", Namespace="http://srv.soap.factura.sit.mx.com")]
+	[XmlRoot("cancelaCFDITest", Namespace="http://srv.soap.factura.sit.mx.com", IsNullable=false)]
+#else
+	[XmlType("cancelaCFDI", Namespace="http://srv.soap.factura.sit.mx.com")]
+	[XmlRoot("cancelaCFDI", Namespace="http://srv.soap.factura.sit.mx.com", IsNullable=false)]
+#endif
+	internal partial class CancelaCFDI
 	{
-		string code;
-		string fault_string;
-		SoapFaultDetail detail;
+		string uuidField;
+		string rfcEmisorField;
+		string userField;
+		string passField;
 
-		[XmlElement("faultcode", Form = XmlSchemaForm.Unqualified)]
-		public string FaultCode {
-			get { return code; }
-			set { code = value; }
+		[XmlElement(Namespace="http://srv.soap.factura.sit.mx.com", Form = XmlSchemaForm.Qualified)]
+		public string uuid {
+			get {
+				return this.uuidField;
+			}
+			set {
+				this.uuidField = value;
+			}
+		}
+		
+		[XmlElement(Namespace="http://srv.soap.factura.sit.mx.com", Form = XmlSchemaForm.Qualified)]
+		public string rfcEmisor {
+			get {
+				return this.rfcEmisorField;
+			}
+			set {
+				this.rfcEmisorField = value;
+			}
 		}
 
-		[XmlElement("faultstring", Form = XmlSchemaForm.Unqualified)]
-		public string FaultString {
-			get { return fault_string; }
-			set { fault_string = value; }
+		[XmlElement(Namespace="http://srv.soap.factura.sit.mx.com", Form = XmlSchemaForm.Qualified)]
+		public string user {
+			get {
+				return this.userField;
+			}
+			set {
+				this.userField = value;
+			}
 		}
 
-		[XmlElement("detail", Form = XmlSchemaForm.Unqualified)]
-		public SoapFaultDetail Detail {
-			get { return detail; }
-			set { detail = value; }
+		[XmlElement(Namespace="http://srv.soap.factura.sit.mx.com", Form = XmlSchemaForm.Qualified)]
+		public string pass {
+			get {
+				return this.passField;
+			}
+			set {
+				this.passField = value;
+			}
 		}
 
 		XmlSerializerNamespaces xmlns;
@@ -69,30 +92,13 @@ namespace Mictlanix.FiscoClic.Client.Internals
 			get {
 				if (xmlns == null) {
 					xmlns = new XmlSerializerNamespaces (new XmlQualifiedName[] {
-						new XmlQualifiedName("s", "http://schemas.xmlsoap.org/soap/envelope/")
+						new XmlQualifiedName("srv", "http://srv.soap.factura.sit.mx.com")
 					});
 				}
 
 				return xmlns;
 			}
 			set { xmlns = value; }
-		}
-	}
-
-	[Serializable()]
-	[XmlType()]
-	public partial class SoapFaultDetail
-	{
-		private FiscoClicException exceptionField;
-
-		[XmlElement("FiscoClicException", Namespace="http://srv.soap.factura.sit.mx.com", Form = XmlSchemaForm.Qualified)]
-		public FiscoClicException Exception {
-			get {
-				return this.exceptionField;
-			}
-			set {
-				this.exceptionField = value;
-			}
 		}
 	}
 }

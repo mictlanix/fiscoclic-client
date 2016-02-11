@@ -8,6 +8,8 @@
     <RootNamespace>Mictlanix.FiscoClic.Client</RootNamespace>
     <AssemblyName>Mictlanix.FiscoClicClient</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -31,6 +33,12 @@
     <Reference Include="System" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="BouncyCastle.Crypto">
+      <HintPath>..\..\packages\BouncyCastle.1.7.0\lib\Net40-Client\BouncyCastle.Crypto.dll</HintPath>
+    </Reference>
+    <Reference Include="Mictlanix.CFDLib">
+      <HintPath>..\..\packages\Mictlanix.CFDLib.0.1.0\lib\net45\Mictlanix.CFDLib.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -43,15 +51,15 @@
     <Compile Include="Internals\CancelaCFDI.cs" />
     <Compile Include="Internals\CancelaCFDIResponse.cs" />
     <Compile Include="FiscoClicClientException.cs" />
+    <Compile Include="Internals\XmlSerializers.Debug.cs" />
+    <Compile Include="Internals\XmlSerializers.cs" />
+    <Compile Include="Internals\Utils.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
     <Folder Include="Internals\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\CFDLib\Mictlanix.CFDLib.csproj">
-      <Project>{63EBACD8-7BB0-480F-81BF-5E0690B27112}</Project>
-      <Name>Mictlanix.CFDLib</Name>
-    </ProjectReference>
+    <None Include="packages.config" />
   </ItemGroup>
 </Project>

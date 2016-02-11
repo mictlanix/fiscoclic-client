@@ -3,12 +3,13 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>10.0.0</ProductVersion>
+    <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{CB9F681A-7BEF-42F1-9A2A-566554E14F84}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <RootNamespace>Mictlanix.FiscoClic.Client.Test</RootNamespace>
     <AssemblyName>Mictlanix.FiscoClicClient.Test</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -31,22 +32,17 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="BouncyCastle.Crypto">
+      <HintPath>..\packages\BouncyCastle.1.7.0\lib\Net40-Client\BouncyCastle.Crypto.dll</HintPath>
+    </Reference>
+    <Reference Include="Mictlanix.CFDLib">
+      <HintPath>..\packages\Mictlanix.CFDLib.0.1.0\lib\net45\Mictlanix.CFDLib.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TestProgram.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
-  <ItemGroup>
-    <ProjectReference Include="..\..\cfdlib\Mictlanix.CFDLib.csproj">
-      <Project>{63EBACD8-7BB0-480F-81BF-5E0690B27112}</Project>
-      <Name>Mictlanix.CFDLib</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Mictlanix.FiscoClicClient\Mictlanix.FiscoClicClient.csproj">
-      <Project>{944C2166-9CF9-4740-BAA3-6E7C5AE62872}</Project>
-      <Name>Mictlanix.FiscoClicClient</Name>
-    </ProjectReference>
-  </ItemGroup>
   <ItemGroup>
     <None Include="CSD01_AAA010101AAA.cer">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -56,5 +52,12 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <Gettext-ScanForTranslations>False</Gettext-ScanForTranslations>
     </None>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\src\Mictlanix.FiscoClicClient\Mictlanix.FiscoClicClient.csproj">
+      <Project>{944C2166-9CF9-4740-BAA3-6E7C5AE62872}</Project>
+      <Name>Mictlanix.FiscoClicClient</Name>
+    </ProjectReference>
   </ItemGroup>
 </Project>

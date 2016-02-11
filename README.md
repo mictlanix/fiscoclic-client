@@ -1,4 +1,2 @@
-fiscoclick-client
-=================
-
-C# client library for FiscoClic web services.
+# Mictlanix FiscoClic Client
+.NET client library for FiscoClic web services.

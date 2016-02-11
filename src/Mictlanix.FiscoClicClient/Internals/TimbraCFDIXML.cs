@@ -4,7 +4,7 @@
 // Author:
 //       Eddy Zavaleta <eddy@mictlanix.com>
 //
-// Copyright (c) 2013 Eddy Zavaleta, Mictlanix, and contributors.
+// Copyright (c) 2013-2016 Eddy Zavaleta, Mictlanix, and contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -31,52 +31,46 @@ using System.Xml.Serialization;
 namespace Mictlanix.FiscoClic.Client.Internals
 {
 	[Serializable]
-	[XmlType("FiscoClicException", Namespace="http://srv.soap.factura.sit.mx.com")]
-	[XmlRoot("FiscoClicException", Namespace="http://srv.soap.factura.sit.mx.com", IsNullable=false)]
-	public partial class FiscoClicException
+#if DEBUG
+	[XmlType("timbraCFDIXMLTest", Namespace = "http://srv.soap.factura.sit.mx.com")]
+	[XmlRoot("timbraCFDIXMLTest", Namespace="http://srv.soap.factura.sit.mx.com", IsNullable=false)]
+#else
+	[XmlType("timbraCFDIXML", Namespace = "http://srv.soap.factura.sit.mx.com")]
+	[XmlRoot("timbraCFDIXML", Namespace="http://srv.soap.factura.sit.mx.com", IsNullable=false)]
+#endif
+	internal partial class TimbraCFDIXML
 	{
-		private string code;
-		private string message;
-		private string field_name;
-		private string service_name;
+		string cfdiField;
+		string userField;
+		string passField;
 
-		[XmlElement("codigo", Namespace="http://srv.soap.factura.sit.mx.com", Form=XmlSchemaForm.Unqualified)]
-		public string Code {
+		[XmlElement(Namespace="http://srv.soap.factura.sit.mx.com", Form = XmlSchemaForm.Qualified)]
+		public string cfdi {
 			get {
-				return this.code;
+				return this.cfdiField;
 			}
 			set {
-				this.code = value;
+				this.cfdiField = value;
 			}
 		}
 
-		[XmlElement("message", Namespace="http://srv.soap.factura.sit.mx.com", Form=XmlSchemaForm.Unqualified)]
-		public string Message {
+		[XmlElement(Namespace="http://srv.soap.factura.sit.mx.com", Form = XmlSchemaForm.Qualified)]
+		public string user {
 			get {
-				return this.message;
+				return this.userField;
 			}
 			set {
-				this.message = value;
+				this.userField = value;
 			}
 		}
 
-		[XmlElement("campo", Namespace="http://srv.soap.factura.sit.mx.com", Form=XmlSchemaForm.Unqualified)]
-		public string FieldName {
+		[XmlElement(Namespace="http://srv.soap.factura.sit.mx.com", Form = XmlSchemaForm.Qualified)]
+		public string pass {
 			get {
-				return this.field_name;
+				return this.passField;
 			}
 			set {
-				this.field_name = value;
-			}
-		}
-
-		[XmlElement("servicio", Namespace="http://srv.soap.factura.sit.mx.com", Form=XmlSchemaForm.Unqualified)]
-		public string ServiceName {
-			get {
-				return this.service_name;
-			}
-			set {
-				this.service_name = value;
+				this.passField = value;
 			}
 		}
 

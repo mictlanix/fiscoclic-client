@@ -1,10 +1,10 @@
-//
-// AssemblyInfo.cs
+﻿//
+// Utils.cs
 //
 // Author:
 //       Eddy Zavaleta <eddy@mictlanix.com>
 //
-// Copyright (c) 2013 Eddy Zavaleta, Mictlanix, and contributors.
+// Copyright (c) 2016 Eddy Zavaleta, Mictlanix, and contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -23,25 +23,32 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
-using System.Reflection;
-using System.Runtime.CompilerServices;
+using System;
+using System.IO;
+using System.Text;
+using System.Xml;
+using System.Xml.Serialization;
 
-// Information about this assembly is defined by the following attributes. 
-// Change them to the values specific to your project.
-[assembly: AssemblyTitle ("Mictlanix.FiscoClicClient.Test")]
-[assembly: AssemblyDescription ("")]
-[assembly: AssemblyConfiguration ("")]
-[assembly: AssemblyCompany ("Mictlanix")]
-[assembly: AssemblyProduct ("")]
-[assembly: AssemblyCopyright ("Eddy Zavaleta, Mictlanix, and contributors.")]
-[assembly: AssemblyTrademark ("")]
-[assembly: AssemblyCulture ("")]
-// The assembly version has the format "{Major}.{Minor}.{Build}.{Revision}".
-// The form "{Major}.{Minor}.*" will automatically update the build and revision,
-// and "{Major}.{Minor}.{Build}.*" will update just the revision.
-[assembly: AssemblyVersion ("1.0.*")]
-// The following attributes are used to specify the signing key for the assembly, 
-// if desired. See the Mono documentation for more information about signing.
-//[assembly: AssemblyDelaySign(false)]
-//[assembly: AssemblyKeyFile("")]
+namespace Mictlanix.FiscoClic.Client.Internals {
+	internal static class Utils {
+		public static MemoryStream SerializeToXmlStream<T>(T obj, XmlSerializerNamespaces xmlns)
+		{
+			var ms = new MemoryStream (4 * 1024);
+			var xs = new XmlSerializerContract ().GetSerializer (typeof(T));
 
+			using (var xml = new XmlTextWriter (ms, new UTF8Encoding (false))) {
+				xs.Serialize (xml, obj, xmlns);
+				ms.Seek (0, SeekOrigin.Begin);
+			}
+
+			return ms;
+		}
+
+		public static T DeserializeFromXmlStream<T>(Stream xml) where T : class
+		{
+			var xs = new XmlSerializerContract ().GetSerializer (typeof(T));
+			object obj = xs.Deserialize (xml);
+			return obj as T;
+		}
+	}
+}

@@ -4,7 +4,7 @@
 // Author:
 //       Eddy Zavaleta <eddy@mictlanix.com>
 //
-// Copyright (c) 2013 Eddy Zavaleta, Mictlanix, and contributors.
+// Copyright (c) 2013-2016 Eddy Zavaleta, Mictlanix, and contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -38,9 +38,9 @@ namespace Mictlanix.FiscoClic.Client.Internals
 	[XmlType("cancelaCFDIResponse", Namespace="http://srv.soap.factura.sit.mx.com")]
 	[XmlRoot("cancelaCFDIResponse", Namespace="http://srv.soap.factura.sit.mx.com", IsNullable=false)]
 #endif
-	public class CancelaCFDIResponse
+	internal partial class CancelaCFDIResponse
 	{
-		private string returnField;
+		string returnField;
 
 		[XmlElement("return", Form = XmlSchemaForm.Unqualified)]
 		public string Return {

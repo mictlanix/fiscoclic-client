@@ -1,11 +1,9 @@
-﻿
+
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mictlanix.FiscoClicClient", "Mictlanix.FiscoClicClient\Mictlanix.FiscoClicClient.csproj", "{944C2166-9CF9-4740-BAA3-6E7C5AE62872}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mictlanix.FiscoClicClient", "src\Mictlanix.FiscoClicClient\Mictlanix.FiscoClicClient.csproj", "{944C2166-9CF9-4740-BAA3-6E7C5AE62872}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mictlanix.FiscoClicClient.Test", "Mictlanix.FiscoClicClient.Test\Mictlanix.FiscoClicClient.Test.csproj", "{CB9F681A-7BEF-42F1-9A2A-566554E14F84}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mictlanix.CFDLib", "..\cfdlib\Mictlanix.CFDLib.csproj", "{63EBACD8-7BB0-480F-81BF-5E0690B27112}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests", "test\Tests.csproj", "{CB9F681A-7BEF-42F1-9A2A-566554E14F84}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -13,10 +11,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{63EBACD8-7BB0-480F-81BF-5E0690B27112}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{63EBACD8-7BB0-480F-81BF-5E0690B27112}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{63EBACD8-7BB0-480F-81BF-5E0690B27112}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{63EBACD8-7BB0-480F-81BF-5E0690B27112}.Release|Any CPU.Build.0 = Release|Any CPU
 		{944C2166-9CF9-4740-BAA3-6E7C5AE62872}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{944C2166-9CF9-4740-BAA3-6E7C5AE62872}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{944C2166-9CF9-4740-BAA3-6E7C5AE62872}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -27,7 +21,6 @@ Global
 		{CB9F681A-7BEF-42F1-9A2A-566554E14F84}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
-		StartupItem = Mictlanix.FiscoClicClient.Test\Mictlanix.FiscoClicClient.Test.csproj
 		Policies = $0
 		$0.DotNetNamingPolicy = $1
 		$1.DirectoryNamespaceAssociation = None
@@ -36,7 +29,6 @@ Global
 		$2.inheritsSet = null
 		$2.scope = text/x-csharp
 		$0.CSharpFormattingPolicy = $3
-		$3.ElseIfNewLinePlacement = SameLine
 		$3.AfterDelegateDeclarationParameterComma = True
 		$3.inheritsSet = Mono
 		$3.inheritsScope = text/x-csharp
@@ -181,5 +173,6 @@ Global
 		$30.MessageStyle = $31
 		$31.LineAlign = 0
 		$30.inheritsSet = Mono
+		StartupItem = Mictlanix.FiscoClicClient.Test\Mictlanix.FiscoClicClient.Test.csproj
 	EndGlobalSection
 EndGlobal

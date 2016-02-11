@@ -4,7 +4,7 @@
 // Author:
 //       Eddy Zavaleta <eddy@mictlanix.com>
 //
-// Copyright (c) 2013 Eddy Zavaleta, Mictlanix, and contributors.
+// Copyright (c) 2013-2016 Eddy Zavaleta, Mictlanix, and contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -29,23 +29,22 @@ using System.Runtime.Serialization.Formatters;
 using System.Text;
 using System.Xml;
 using System.Xml.Serialization;
-using Mictlanix.CFDv32;
 
 namespace Mictlanix.FiscoClic.Client.Internals
 {
 	[Serializable]
-	[XmlType("Envelope", Namespace="http://schemas.xmlsoap.org/soap/envelope/")]
-	[XmlRoot("Envelope", Namespace="http://schemas.xmlsoap.org/soap/envelope/", IsNullable=false)]
-	public partial class SoapEnvelope
+	[XmlType ("Envelope", Namespace = "http://schemas.xmlsoap.org/soap/envelope/")]
+	[XmlRoot ("Envelope", Namespace = "http://schemas.xmlsoap.org/soap/envelope/", IsNullable = false)]
+	internal partial class SoapEnvelope
 	{
-		private object[] bodyField;
+		object[] bodyField;
 
-		[XmlArray("Body")]
-		[XmlArrayItem(typeof(TimbraCFDIXML), Namespace="http://srv.soap.factura.sit.mx.com")]
-		[XmlArrayItem(typeof(TimbraCFDIXMLResponse), Namespace="http://srv.soap.factura.sit.mx.com")]
-		[XmlArrayItem(typeof(CancelaCFDI), Namespace="http://srv.soap.factura.sit.mx.com")]
-		[XmlArrayItem(typeof(CancelaCFDIResponse), Namespace="http://srv.soap.factura.sit.mx.com")]
-		[XmlArrayItem(typeof(SoapFault), Namespace="http://schemas.xmlsoap.org/soap/envelope/")]
+		[XmlArray ("Body")]
+		[XmlArrayItem (typeof(TimbraCFDIXML), Namespace = "http://srv.soap.factura.sit.mx.com")]
+		[XmlArrayItem (typeof(TimbraCFDIXMLResponse), Namespace = "http://srv.soap.factura.sit.mx.com")]
+		[XmlArrayItem (typeof(CancelaCFDI), Namespace = "http://srv.soap.factura.sit.mx.com")]
+		[XmlArrayItem (typeof(CancelaCFDIResponse), Namespace = "http://srv.soap.factura.sit.mx.com")]
+		[XmlArrayItem (typeof(SoapFault), Namespace = "http://schemas.xmlsoap.org/soap/envelope/")]
 		public object[] Body {
 			get {
 				return this.bodyField;
@@ -62,8 +61,8 @@ namespace Mictlanix.FiscoClic.Client.Internals
 			get {
 				if (xmlns == null) {
 					xmlns = new XmlSerializerNamespaces (new XmlQualifiedName[] {
-						new XmlQualifiedName("s", "http://schemas.xmlsoap.org/soap/envelope/"),
-						new XmlQualifiedName("srv", "http://srv.soap.factura.sit.mx.com")
+						new XmlQualifiedName ("s", "http://schemas.xmlsoap.org/soap/envelope/"),
+						new XmlQualifiedName ("srv", "http://srv.soap.factura.sit.mx.com")
 					});
 				}
 				
@@ -74,35 +73,33 @@ namespace Mictlanix.FiscoClic.Client.Internals
 
 		public MemoryStream ToXmlStream ()
 		{
-			return CFDLib.Utils.SerializeToXmlStream (this, Xmlns);
+			return Utils.SerializeToXmlStream (this, Xmlns);
 		}
 
 		public byte[] ToXmlBytes ()
 		{
-			using (var ms = ToXmlStream()) {
+			using (var ms = ToXmlStream ()) {
 				return ms.ToArray ();
 			}
 		}
 
 		public string ToXmlString ()
 		{
-			using (var ms = ToXmlStream()) {
+			using (var ms = ToXmlStream ()) {
 				return Encoding.UTF8.GetString (ms.ToArray ());
 			}
 		}
 
 		public static SoapEnvelope FromXml (string xml)
 		{
-			using (var ms = new MemoryStream (Encoding.UTF8.GetBytes(xml))) {
+			using (var ms = new MemoryStream (Encoding.UTF8.GetBytes (xml))) {
 				return FromXml (ms);
 			}
 		}
 
 		public static SoapEnvelope FromXml (Stream xml)
 		{
-			var xs = new XmlSerializer (typeof(SoapEnvelope));
-			object obj = xs.Deserialize (xml);
-			return obj as SoapEnvelope;
+			return Utils.DeserializeFromXmlStream<SoapEnvelope> (xml);
 		}
 	}
 }
