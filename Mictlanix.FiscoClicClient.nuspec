@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<package >
+	<metadata>
+		<id>Mictlanix.FiscoClicClient</id>
+		<version>0.1.0</version>
+		<title>Mictlanix FiscoClic Client</title>
+		<authors>Eddy Zavaleta, Mictlanix, and contributors</authors>
+		<owners/>
+		<licenseUrl>https://github.com/mictlanix/fiscoclic-client/blob/master/LICENSE</licenseUrl>
+		<projectUrl>https://github.com/mictlanix/fiscoclic-client</projectUrl>
+		<requireLicenseAcceptance>false</requireLicenseAcceptance>
+		<description>.NET client library for FiscoClic web services (FiscoClic.mx)</description>
+		<releaseNotes>First public release.</releaseNotes>
+		<copyright>Copyright 2016</copyright>
+		<tags>cfdi factura invoice web services api client library .net</tags>
+		<dependencies>
+			<dependency id="Mictlanix.CFDLib" version="0.1.0" />
+		</dependencies>
+	</metadata>
+	<files>
+		<file src="src/Mictlanix.FiscoClicClient/bin/Release/Mictlanix.FiscoClicClient.dll" target="lib\net45" />
+	</files>
+</package>
