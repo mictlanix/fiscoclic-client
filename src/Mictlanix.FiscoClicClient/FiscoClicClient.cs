@@ -59,7 +59,12 @@ namespace Mictlanix.FiscoClic.Client
 
 		public TimbreFiscalDigital Stamp (Comprobante cfd)
 		{
-			var env = CreateEnvelope (cfd);
+			return Stamp (cfd.ToXmlString ());
+		}
+
+		public TimbreFiscalDigital Stamp (string xml)
+		{
+			var env = CreateEnvelope (xml);
 			string response = TryRequest (env);
 
 			if (response.Length == 0) {
@@ -121,12 +126,12 @@ namespace Mictlanix.FiscoClic.Client
 			return false;
 		}
 
-		SoapEnvelope CreateEnvelope (Comprobante doc)
+		SoapEnvelope CreateEnvelope (string xml)
 		{
 			var request = new SoapEnvelope {
 				Body = new TimbraCFDIXML[] {
 					new TimbraCFDIXML {
-						cfdi = doc.ToXmlString (),
+						cfdi = xml,
 						user = Username,
 						pass = Password
 					}
@@ -156,7 +161,6 @@ namespace Mictlanix.FiscoClic.Client
 		{
 			var bytes = env.ToXmlBytes ();
 			string response = string.Empty;
-			var dt = DateTime.Now;
 
 #if DEBUG
 			System.Diagnostics.Debug.WriteLine (env.ToXmlString ());

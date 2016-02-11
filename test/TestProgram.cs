@@ -31,17 +31,18 @@ using System.Text;
 using Mictlanix.CFDv32;
 using Mictlanix.FiscoClic.Client;
 
-namespace Tests
-{
-	class TestProgram
-	{
+namespace Tests {
+	class TestProgram {
 		const string CSD_CERTIFICATE_FILE = "CSD01_AAA010101AAA.cer";
 		const string CSD_PRIVATE_KEY_FILE = "CSD01_AAA010101AAA.key";
 		const string CSD_PRIVATE_KEY_PWD = "12345678a";
 		const string USERNAME = "AAA111111ZZZ";
 		const string PASSWORD = "TeStInGfIsCoClIc2012Ws";
 
-		static DateTime TEST_DATE = new DateTime (2013, 08, 26, 05, 06, 07, DateTimeKind.Unspecified);
+		static DateTime NOW = DateTime.Now;
+		static DateTime TEST_DATE = new DateTime (NOW.Year, NOW.Month, NOW.Day,
+												  NOW.Hour, NOW.Minute, NOW.Second, DateTimeKind.Unspecified);
+		//static DateTime TEST_DATE = new DateTime (2016, 02, 09, 10, 11, 12, DateTimeKind.Unspecified);
 
 		static void Main(string[] args)
 		{
@@ -54,7 +55,7 @@ namespace Tests
 			var cfd = CreateCFD ();
 			var cli = new FiscoClicClient (username, password);
 
-			AddItems (cfd, "Producto", 3);
+			AddItems (cfd, "Product", 3);
 			cfd.Sign (File.ReadAllBytes (CSD_PRIVATE_KEY_FILE), Encoding.UTF8.GetBytes(CSD_PRIVATE_KEY_PWD));
 
 			var tfd = cli.Stamp (cfd);
